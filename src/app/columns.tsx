@@ -6,16 +6,16 @@ import { ArrowUpDown} from "lucide-react"
 
 export type Station = {
     id: string
-    name: string
-    type: string
-    date:string
+    nazwa: string
+    typ: string
+    dacie:string
     status: string
     
   }
   
   export const columns: ColumnDef<Station>[] = [
     {
-      accessorKey: "name",
+      accessorKey: "nazwa",
       header: ({ column }) => {
         return (
           <Button
@@ -29,7 +29,7 @@ export type Station = {
       },
     },
     {
-      accessorKey: "type",
+      accessorKey: "typ",
       header: ({ column }) => {
         return (
           <Button
@@ -43,7 +43,7 @@ export type Station = {
       },
     },
     {
-      accessorKey: "date",
+      accessorKey: "dacie",
       header: ({ column }) => {
         return (
           <Button
@@ -55,11 +55,7 @@ export type Station = {
           </Button>
         )
       },
-      cell:({row}) =>{
-        const date = new Date(row.getValue("date"))
-        const formatted = date.toLocaleTimeString("pl-PL")+" "+date.toLocaleDateString("pl-PL")
-        return <div className="font-medium">{formatted}</div>
-      },
+      
     }
     ,
     {

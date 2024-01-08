@@ -13,7 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select" 
 import {
   Table,
   TableBody,
@@ -32,10 +38,12 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  selectedColumn,
+  setSelectedColumn
+}: DataTableProps<TData, TValue> & { selectedColumn: string, setSelectedColumn: Function }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+      []
   )
   const table = useReactTable({
     data,
@@ -50,15 +58,28 @@ export function DataTable<TData, TValue>({
       sorting,  
       columnFilters,
   },})
-
+  
   return (
     <div>
+      <div className="flex items-center py-4 mr-4">
+            <Select onValueChange={(val) => setSelectedColumn(val)}>
+            <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Nazwa Stacji" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="nazwa">Nazwa Stacji</SelectItem>
+                <SelectItem value="typ">Rodzaj</SelectItem>
+                <SelectItem value="dacie">Data Utworzenia</SelectItem>
+                <SelectItem value="status">Status</SelectItem>
+            </SelectContent>
+            </Select>
+        </div>
       <div className="flex items-center py-4 mt-[30px] ml-[50px]">
         <Input
-          placeholder="Filtruj Stacje..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          placeholder={'Filtruj po ' + selectedColumn + '...'}
+          value={(table.getColumn(selectedColumn)?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn(selectedColumn)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -100,7 +121,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                Brak wyniku
               </TableCell>
             </TableRow>
           )}
